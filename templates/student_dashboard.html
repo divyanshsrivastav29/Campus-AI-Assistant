@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | Campus AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f3f6fb;
+            color: #173354;
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #142d4d;
+            color: white;
+            padding: 27px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 27px;
+            font-weight: 750;
+            margin: 0 8px;
+        }
+
+        .brand span {
+            color: #61d4e9;
+        }
+
+        .subtitle {
+            margin: 9px 8px 30px;
+            color: #bdcce0;
+            font-size: 13px;
+        }
+
+        .nav-title {
+            color: #91abc9;
+            font-size: 11px;
+            letter-spacing: 1.3px;
+            margin: 12px 9px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #f0f5ff;
+            padding: 13px 12px;
+            margin-bottom: 6px;
+            border-radius: 9px;
+            display: block;
+            transition: background 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #29496d;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 18px 5px 0;
+            border-top: 1px solid #35516f;
+            overflow-wrap: anywhere;
+        }
+
+        .sidebar-footer small {
+            display: block;
+            color: #b9c9dc;
+            margin-top: 5px;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            background: white;
+            padding: 23px 32px;
+            border-bottom: 1px solid #e3eaf3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .topbar h1 {
+            font-size: 25px;
+            margin: 0 0 5px;
+        }
+
+        .topbar p {
+            color: #72839a;
+            margin: 0;
+        }
+
+        .content {
+            max-width: 1450px;
+            padding: 25px 32px 40px;
+            margin: auto;
+        }
+
+        .flash {
+            background: #e8f3ff;
+            border: 1px solid #c7e0ff;
+            color: #18548d;
+            padding: 13px 16px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .flash.danger {
+            background: #fff0f0;
+            color: #a12b2b;
+            border-color: #ffd0d0;
+        }
+
+        .flash.warning {
+            background: #fff8e6;
+            color: #8c5a00;
+            border-color: #f5dfa3;
+        }
+
+        .welcome {
+            background: linear-gradient(115deg, #204f83, #317cc0);
+            color: white;
+            padding: 29px 32px;
+            border-radius: 16px;
+            margin-bottom: 27px;
+        }
+
+        .welcome h2 {
+            margin: 0 0 9px;
+            font-size: 27px;
+        }
+
+        .welcome p {
+            line-height: 1.6;
+            margin: 0;
+            color: #eef6ff;
+        }
+
+        .section-heading {
+            margin: 26px 0 16px;
+            font-size: 21px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e4ebf4;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 5px 20px #1c3c5d08;
+            min-width: 0;
+        }
+
+        .card-label {
+            color: #73869e;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .card-value {
+            font-size: 19px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .card-note {
+            color: #7d8da2;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .panel-heading h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .view-link {
+            color: #286bb1;
+            font-size: 13px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .item {
+            padding: 13px 0;
+            border-top: 1px solid #edf1f6;
+        }
+
+        .item:first-of-type {
+            border-top: 0;
+        }
+
+        .item strong {
+            display: block;
+            margin-bottom: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .item p {
+            color: #6d8098;
+            line-height: 1.55;
+            margin: 4px 0;
+            font-size: 14px;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+
+        .item small {
+            color: #8797aa;
+        }
+
+        .empty {
+            color: #7b8da3;
+            padding: 18px 0;
+            font-size: 14px;
+        }
+
+        .chat-banner {
+            margin-top: 22px;
+            background: #e7f2ff;
+            border: 1px solid #cfe4ff;
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .chat-banner h3 {
+            margin: 0 0 5px;
+        }
+
+        .chat-banner p {
+            color: #5c7591;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .primary-button {
+            display: inline-block;
+            background: #286bb1;
+            color: white;
+            padding: 12px 17px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .primary-button:hover {
+            background: #1e568f;
+        }
+
+        .footer {
+            text-align: center;
+            color: #8a9aaf;
+            font-size: 12px;
+            padding: 28px 0 0;
+        }
+
+        @media (max-width: 1050px) {
+            .profile-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 17px;
+            }
+
+            .subtitle {
+                margin-bottom: 12px;
+            }
+
+            .nav-link {
+                display: inline-block;
+                padding: 9px 10px;
+                margin: 0 3px 4px 0;
+            }
+
+            .sidebar-footer {
+                margin-top: 12px;
+            }
+
+            .topbar {
+                padding: 18px;
+            }
+
+            .topbar h1 {
+                font-size: 21px;
+            }
+
+            .content {
+                padding: 17px;
+            }
+
+            .welcome {
+                padding: 24px;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-banner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">Campus <span>AI</span></div>
+        <div class="subtitle">Your campus companion</div>
+
+        <div class="nav-title">MAIN MENU</div>
+        <a class="nav-link active" href="{{ url_for('dashboard') }}">⌂ Dashboard</a>
+        <a class="nav-link" href="{{ url_for('chatbot_page') }}">✦ AI Chatbot</a>
+        <a class="nav-link" href="{{ url_for('student_timetable') }}">▤ My Timetable</a>
+        <a class="nav-link" href="{{ url_for('student_events') }}">▦ Campus Events</a>
+
+        <div class="nav-title">ACCOUNT</div>
+        <a class="nav-link" href="{{ url_for('logout') }}">↗ Logout</a>
+
+        <div class="sidebar-footer">
+            <strong>{{ user_name }}</strong>
+            <small>Student Account</small>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <h1>Student Dashboard</h1>
+                <p>Your academic information at a glance.</p>
+            </div>
+            <div>Welcome, {{ user_name }}</div>
+        </header>
+
+        <section class="content">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <section class="welcome">
+                <h2>Welcome back, {{ user_name }}! 👋</h2>
+                <p>
+                    Welcome to Campus AI Assistant. Check your academic details,
+                    read the latest campus notices, explore upcoming events,
+                    and ask the AI chatbot for help.
+                </p>
+            </section>
+
+            <h2 class="section-heading">My Academic Overview</h2>
+
+            <section class="profile-grid">
+                <div class="card">
+                    <div class="card-label">Full Name</div>
+                    <div class="card-value">{{ user_name }}</div>
+                    <div class="card-note">Registered account</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Roll Number</div>
+                    <div class="card-value">
+                        {{ student.roll_number if student and student.roll_number else 'Not added' }}
+                    </div>
+                    <div class="card-note">Student identification</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Department</div>
+                    <div class="card-value">
+                        {{ student.department_name if student and student.department_name else 'Not assigned' }}
+                    </div>
+                    <div class="card-note">Academic department</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Semester</div>
+                    <div class="card-value">
+                        {{ student.semester if student and student.semester else 'Not assigned' }}
+                    </div>
+                    <div class="card-note">
+                        {{ student.course if student and student.course else 'Course not added' }}
+                    </div>
+                </div>
+            </section>
+
+            {% if not student %}
+                <div class="flash warning" style="margin-top: 16px;">
+                    Your student profile is not linked to this account yet.
+                    Please contact the administrator to add your student record.
+                </div>
+            {% endif %}
+
+            <h2 class="section-heading">Campus Information</h2>
+
+            <section class="two-column">
+                <div class="card">
+                    <div class="panel-heading">
+                        <h3>📢 Latest Notices</h3>
+                        {% if session.get('role') == 'Admin' %}
+                            <a class="view-link" href="{{ url_for('manage_notices') }}">Manage</a>
+                        {% endif %}
+                    </div>
+
+                    {% for notice in recent_notices %}
+                        <div class="item">
+                            <strong>{{ notice.title }}</strong>
+                            <p>{{ notice.description or 'No description provided.' }}</p>
+                            <small>
+                                {{ notice.category or 'General' }}
+                                · {{ notice.published_at }}
+                            </small>
+                        </div>
+                    {% else %}
+                        <div class="empty">No current notices are available.</div>
+                    {% endfor %}
+                </div>
+
+                <div class="card">
+                    <div class="panel-heading">
+                        <h3>📅 Upcoming Events</h3>
+                        <a class="view-link" href="{{ url_for('student_events') }}">View all</a>
+                    </div>
+
+                    {% for event in events %}
+                        <div class="item">
+                            <strong>{{ event.event_name }}</strong>
+                            <p>
+                                Date: {{ event.event_date }}
+                                {% if event.start_time %}
+                                    · {{ event.start_time }}
+                                {% endif %}
+                            </p>
+                            <p>Venue: {{ event.venue or 'Not specified' }}</p>
+                            {% if event.description %}
+                                <p>{{ event.description }}</p>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="empty">No upcoming campus events are listed.</div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <h2 class="section-heading">My Timetable</h2>
+
+            <section class="card">
+                <div class="panel-heading">
+                    <h3>🗓️ Class Schedule</h3>
+                    <a class="view-link" href="{{ url_for('student_timetable') }}">View full timetable</a>
+                </div>
+
+                {% for item in timetable %}
+                    <div class="item">
+                        <strong>{{ item.day_of_week }} — {{ item.subject_name }}</strong>
+                        <p>
+                            {{ item.start_time }} – {{ item.end_time }}
+                            · Room {{ item.room_number or 'Not assigned' }}
+                        </p>
+                        <small>Faculty: {{ item.faculty_name or 'Not assigned' }}</small>
+                    </div>
+                {% else %}
+                    <div class="empty">
+                        No timetable entries are available for your semester yet.
+                    </div>
+                {% endfor %}
+            </section>
+
+            <section class="chat-banner">
+                <div>
+                    <h3>Need help finding campus information?</h3>
+                    <p>Ask Campus AI about notices, events, faculty, departments, or your timetable.</p>
+                </div>
+                <a class="primary-button" href="{{ url_for('chatbot_page') }}">
+                    Open AI Chatbot →
+                </a>
+            </section>
+
+            <footer class="footer">
+                Campus AI Assistant · Student Portal
+            </footer>
+
+        </section>
+    </main>
+</div>
+</body>
+</html>

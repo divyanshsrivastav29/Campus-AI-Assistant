@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Events | Campus AI Assistant</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 20px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h2 {
+            font-size: 23px;
+        }
+
+        nav {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #93c5fd;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .search {
+            width: 100%;
+            max-width: 450px;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            margin-bottom: 25px;
+            background: white;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 14px;
+            padding: 23px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid #2563eb;
+            transition: transform 0.2s;
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .event-label {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .event-card h2 {
+            font-size: 20px;
+            margin-bottom: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .event-info {
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 14px;
+        }
+
+        .event-description {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .empty {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            color: #64748b;
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        footer {
+            margin-top: 45px;
+            padding: 22px;
+            text-align: center;
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        @media (max-width: 900px) {
+            .events-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                align-items: flex-start;
+            }
+
+            .page-heading h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Campus AI Assistant</h2>
+
+    <nav>
+        <a href="{{ url_for('student_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('student_timetable') }}">My Timetable</a>
+        <a href="{{ url_for('chatbot_page') }}">AI Assistant</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <section class="page-heading">
+        <h1>College Events 🎓</h1>
+        <p>
+            Discover upcoming workshops, seminars, cultural programs,
+            competitions, and other campus activities.
+        </p>
+    </section>
+
+    <input
+        type="search"
+        id="eventSearch"
+        class="search"
+        placeholder="Search events by name, venue, or date..."
+        aria-label="Search college events"
+    >
+
+    <section class="events-grid" id="eventsGrid">
+
+        {% for event in events %}
+            <article class="event-card">
+                <span class="event-label">Campus Event</span>
+
+                <h2>{{ event.event_name }}</h2>
+
+                <div class="event-info">
+                    <div>
+                        <strong>Date:</strong>
+                        {{ event.event_date or 'Date not specified' }}
+                    </div>
+
+                    <div>
+                        <strong>Time:</strong>
+                        {{ event.start_time or 'To be announced' }}
+                    </div>
+
+                    <div>
+                        <strong>Venue:</strong>
+                        {{ event.venue or 'To be announced' }}
+                    </div>
+                </div>
+
+                <p class="event-description">
+                    {{ event.description or 'More details will be announced soon.' }}
+                </p>
+            </article>
+        {% else %}
+            <div class="empty" id="emptyMessage">
+                <h2>No events available</h2>
+                <p>New college events will appear here when published by the administrator.</p>
+            </div>
+        {% endfor %}
+
+    </section>
+
+</main>
+
+<footer>
+    Campus AI Assistant &copy; 2026 — Your Campus, Connected.
+</footer>
+
+<script>
+    const searchInput = document.getElementById("eventSearch");
+    const eventCards = document.querySelectorAll(".event-card");
+
+    searchInput.addEventListener("input", function () {
+        const keyword = this.value.toLowerCase();
+        let visibleCount = 0;
+
+        eventCards.forEach(card => {
+            const matches = card.textContent.toLowerCase().includes(keyword);
+            card.style.display = matches ? "" : "none";
+
+            if (matches) {
+                visibleCount++;
+            }
+        });
+
+        let noResults = document.getElementById("noSearchResults");
+
+        if (visibleCount === 0 && eventCards.length > 0) {
+            if (!noResults) {
+                noResults = document.createElement("div");
+                noResults.id = "noSearchResults";
+                noResults.className = "empty";
+                noResults.textContent = "No events match your search.";
+                document.getElementById("eventsGrid").appendChild(noResults);
+            }
+            noResults.style.display = "";
+        } else if (noResults) {
+            noResults.style.display = "none";
+        }
+    });
+</script>
+
+</body>
+</html>

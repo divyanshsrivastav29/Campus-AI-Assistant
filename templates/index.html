@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus AI Assistant</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eaf2ff, #f5f0ff);
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: white;
+            box-shadow: 0 2px 12px #00000010;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        nav a, .btn {
+            text-decoration: none;
+            background: #4f46e5;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 8px;
+        }
+
+        .hero {
+            max-width: 900px;
+            margin: 100px auto;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: #4f46e5;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 0 auto 32px;
+            line-height: 1.8;
+            color: #64748b;
+            font-size: 17px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 950px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        .feature {
+            background: white;
+            padding: 28px 20px;
+            text-align: center;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px #00000008;
+        }
+
+        .feature h3 {
+            margin: 12px 0;
+        }
+
+        .feature p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 18px 5%;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .hero {
+                margin: 55px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">Campus AI Assistant</div>
+        <a href="{{ url_for('login') }}">Login</a>
+    </nav>
+
+    <section class="hero">
+        <h1>Your Campus, <span>Smarter</span></h1>
+
+        <p>
+            Your intelligent campus companion for accessing
+            academic information, college notices, events,
+            faculty details and timetables in one place.
+        </p>
+
+        <a class="btn" href="{{ url_for('login') }}">
+            Get Started
+        </a>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <div style="font-size: 36px;">🤖</div>
+            <h3>AI Chatbot</h3>
+            <p>Get help finding campus information.</p>
+        </div>
+
+        <div class="feature">
+            <div style="font-size: 36px;">📢</div>
+            <h3>College Notices</h3>
+            <p>Access important campus announcements.</p>
+        </div>
+
+        <div class="feature">
+            <div style="font-size: 36px;">📅</div>
+            <h3>Timetable & Events</h3>
+            <p>Stay updated on classes and college events.</p>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 Campus AI Assistant | College Project
+    </footer>
+</body>
+</html>

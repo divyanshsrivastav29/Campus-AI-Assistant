@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Management | Campus AI Assistant</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h2 {
+            font-size: 23px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #93c5fd;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .field textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            margin-top: 18px;
+            background: #2563eb;
+            color: white;
+        }
+
+        .add-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+        }
+
+        .search {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 750px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        .description {
+            max-width: 300px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .category {
+            display: inline-block;
+            padding: 5px 9px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+            padding: 8px 12px;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        .empty {
+            padding: 20px;
+            color: #64748b;
+        }
+
+        @media (max-width: 650px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Campus AI Assistant</h2>
+    <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('manage_students') }}">Students</a>
+        <a href="{{ url_for('manage_faculty') }}">Faculty</a>
+        <a href="{{ url_for('manage_notices') }}">Notices</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <section class="page-heading">
+        <h1>Notice Management</h1>
+        <p>Create and manage important college announcements.</p>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <section class="card">
+        <h2>Publish a New Notice</h2>
+
+        <form method="POST" action="{{ url_for('manage_notices') }}">
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="title">Notice Title *</label>
+                    <input type="text" id="title" name="title"
+                           placeholder="Enter notice title" maxlength="255"
+                           required>
+                </div>
+
+                <div class="field">
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
+                        <option value="General">General</option>
+                        <option value="Academic">Academic</option>
+                        <option value="Examination">Examination</option>
+                        <option value="Events">Events</option>
+                        <option value="Placement">Placement</option>
+                        <option value="Holiday">Holiday</option>
+                    </select>
+                </div>
+
+                <div class="field full-width">
+                    <label for="description">Notice Description *</label>
+                    <textarea id="description" name="description"
+                              placeholder="Write the complete announcement..."
+                              required></textarea>
+                </div>
+
+                <div class="field">
+                    <label for="expiry_date">Expiry Date (Optional)</label>
+                    <input type="date" id="expiry_date" name="expiry_date">
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn add-btn">
+                + Publish Notice
+            </button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Published Notices</h2>
+
+        <input type="search" class="search" id="noticeSearch"
+               placeholder="Search notices by title or category...">
+
+        <div class="table-wrap">
+            <table id="noticeTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Published On</th>
+                        <th>Expiry Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for notice in notices %}
+                    <tr>
+                        <td>{{ notice.notice_id }}</td>
+                        <td>{{ notice.title }}</td>
+                        <td class="description">{{ notice.description }}</td>
+                        <td>
+                            <span class="category">
+                                {{ notice.category or 'General' }}
+                            </span>
+                        </td>
+                        <td>{{ notice.published_at or '-' }}</td>
+                        <td>{{ notice.expiry_date or 'No expiry' }}</td>
+                        <td>
+                            <form method="POST"
+                                  action="{{ url_for('delete_notice', notice_id=notice.notice_id) }}"
+                                  onsubmit="return confirm('Delete this notice permanently?');">
+                                <button type="submit" class="btn delete-btn">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="empty">
+                            No notices available. Publish your first notice above.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    const searchInput = document.getElementById("noticeSearch");
+
+    searchInput.addEventListener("input", function () {
+        const keyword = this.value.toLowerCase();
+
+        document.querySelectorAll("#noticeTable tbody tr").forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(keyword)
+                ? ""
+                : "none";
+        });
+    });
+
+    const expiryInput = document.getElementById("expiry_date");
+    const today = new Date();
+    const localToday = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().split("T")[0];
+
+    expiryInput.min = localToday;
+</script>
+
+</body>
+</html>

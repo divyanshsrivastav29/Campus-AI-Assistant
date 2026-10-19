@@ -1,0 +1,1454 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Campus AI Assistant</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #eef2ff;
+            --sidebar: #111827;
+            --sidebar-hover: #263244;
+            --background: #f5f7fb;
+            --white: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --radius: 14px;
+            --shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* Sidebar */
+
+        .sidebar {
+            width: 255px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: var(--sidebar);
+            color: #d1d5db;
+            padding: 25px 16px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px 30px;
+            color: white;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            background: var(--primary);
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+        }
+
+        .brand h2 {
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .brand p {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .menu-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #9ca3af;
+            padding: 10px 12px;
+            margin-top: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 12px 14px;
+            margin: 3px 0;
+            border-radius: 9px;
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-link i {
+            width: 18px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--sidebar-hover);
+            color: white;
+        }
+
+        .nav-link.active {
+            box-shadow: inset 3px 0 0 #818cf8;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 25px;
+        }
+
+        .admin-mini-profile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 14px 9px;
+            border-top: 1px solid #374151;
+            margin-top: 14px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #4338ca;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            min-width: 0;
+        }
+
+        .profile-info strong {
+            display: block;
+            font-size: 12px;
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .profile-info span {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        /* Main area */
+
+        .main {
+            margin-left: 255px;
+            min-height: 100vh;
+            padding: 0 30px 35px;
+        }
+
+        .topbar {
+            min-height: 86px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 28px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-heading h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .date-display {
+            font-size: 12px;
+            color: var(--muted);
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 11px 13px;
+        }
+
+        .icon-button {
+            border: 1px solid var(--border);
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        /* Flash messages */
+
+        .flash-container {
+            margin-bottom: 20px;
+        }
+
+        .flash {
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 9px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .flash.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .flash.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .flash.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .flash.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .flash-close {
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+            font-size: 17px;
+            color: inherit;
+        }
+
+        /* Welcome banner */
+
+        .welcome-banner {
+            position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 27px;
+            color: white;
+            background: linear-gradient(120deg, #4338ca, #6366f1 60%, #818cf8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .welcome-banner::after {
+            content: "";
+            width: 230px;
+            height: 230px;
+            border: 35px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            position: absolute;
+            right: 65px;
+            top: -110px;
+            pointer-events: none;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-content .eyebrow {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #e0e7ff;
+            margin-bottom: 11px;
+        }
+
+        .welcome-content h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .welcome-content p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #e0e7ff;
+            max-width: 560px;
+        }
+
+        .welcome-icon {
+            width: 105px;
+            height: 105px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            border-radius: 24px;
+            display: grid;
+            place-items: center;
+            font-size: 43px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Section headings */
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 17px;
+        }
+
+        .section-heading h2 {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .text-link {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .text-link:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Statistics */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 17px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 21px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+        }
+
+        .icon-purple {
+            color: #5b21b6;
+            background: #ede9fe;
+        }
+
+        .icon-blue {
+            color: #1d4ed8;
+            background: #dbeafe;
+        }
+
+        .icon-green {
+            color: #047857;
+            background: #d1fae5;
+        }
+
+        .icon-orange {
+            color: #c2410c;
+            background: #ffedd5;
+        }
+
+        .icon-pink {
+            color: #be185d;
+            background: #fce7f3;
+        }
+
+        .icon-cyan {
+            color: #0e7490;
+            background: #cffafe;
+        }
+
+        .stat-tag {
+            font-size: 10px;
+            color: var(--muted);
+            background: #f3f4f6;
+            border-radius: 20px;
+            padding: 6px 9px;
+        }
+
+        .stat-card h3 {
+            font-size: 29px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: -1px;
+        }
+
+        .stat-card > p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Management cards */
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .management-card {
+            padding: 21px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: white;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            min-height: 180px;
+        }
+
+        .management-card:hover {
+            transform: translateY(-3px);
+            border-color: #c7d2fe;
+        }
+
+        .management-card .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+
+        .management-card h3 {
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .management-card p {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 17px;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .card-action i {
+            transition: transform 0.2s;
+        }
+
+        .management-card:hover .card-action i {
+            transform: translateX(4px);
+        }
+
+        /* Recent information panels */
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 21px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h3 {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .panel-header p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .panel-body {
+            padding: 5px 22px;
+        }
+
+        .notice-item,
+        .event-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            padding: 17px 0;
+            border-bottom: 1px solid #f1f3f7;
+        }
+
+        .notice-item:last-child,
+        .event-item:last-child {
+            border-bottom: 0;
+        }
+
+        .notice-icon {
+            width: 37px;
+            height: 37px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+        }
+
+        .notice-content,
+        .event-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notice-content h4,
+        .event-content h4 {
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .notice-content p,
+        .event-content p {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .notice-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .category-pill {
+            background: #eef2ff;
+            color: #4338ca;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .event-date {
+            min-width: 49px;
+            height: 53px;
+            border-radius: 10px;
+            background: #fff7ed;
+            color: #c2410c;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .event-date .month {
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .event-date .day {
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .event-location {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .empty-state {
+            padding: 35px 15px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .empty-state i {
+            display: block;
+            font-size: 26px;
+            margin-bottom: 12px;
+            color: #cbd5e1;
+        }
+
+        /* Footer */
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            color: var(--muted);
+            font-size: 11px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer strong {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+
+        @media (max-width: 1150px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .management-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 0 17px 25px;
+            }
+
+            .menu-toggle {
+                display: grid;
+            }
+
+            .topbar {
+                min-height: 75px;
+                margin-bottom: 22px;
+            }
+
+            .page-heading h1 {
+                font-size: 19px;
+            }
+
+            .page-heading p {
+                font-size: 10px;
+            }
+
+            .date-display {
+                display: none;
+            }
+
+            .welcome-banner {
+                padding: 24px;
+            }
+
+            .welcome-content h2 {
+                font-size: 22px;
+            }
+
+            .welcome-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 30px;
+                border-radius: 18px;
+            }
+
+            .stats-grid {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-card h3 {
+                font-size: 25px;
+            }
+
+            .stat-tag {
+                display: none;
+            }
+
+            .management-grid {
+                gap: 12px;
+            }
+
+            .management-card {
+                padding: 16px;
+            }
+
+            .panel-header,
+            .panel-body {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.45);
+                z-index: 999;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+
+        @media (max-width: 460px) {
+            .welcome-icon {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .management-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card h3 {
+                font-size: 23px;
+            }
+
+            .section-heading h2 {
+                font-size: 14px;
+            }
+
+            .topbar-right {
+                gap: 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="sidebar">
+
+        <a href="{{ url_for('admin_dashboard') }}" class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+
+            <div>
+                <h2>Campus AI</h2>
+                <p>Assistant Portal</p>
+            </div>
+        </a>
+
+        <div class="menu-label">Main Menu</div>
+
+        <a href="{{ url_for('admin_dashboard') }}"
+           class="nav-link active">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('manage_students') }}" class="nav-link">
+            <i class="fa-solid fa-user-graduate"></i>
+            <span>Student Management</span>
+        </a>
+
+        <a href="{{ url_for('manage_faculty') }}" class="nav-link">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span>Faculty Management</span>
+        </a>
+
+        <a href="{{ url_for('manage_notices') }}" class="nav-link">
+            <i class="fa-solid fa-bullhorn"></i>
+            <span>Notice Management</span>
+        </a>
+
+        <a href="{{ url_for('manage_timetable') }}" class="nav-link">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Timetable Management</span>
+        </a>
+
+        <a href="{{ url_for('event_management') }}" class="nav-link">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Event Management</span>
+        </a>
+
+        <div class="menu-label">AI & Tools</div>
+
+        <a href="{{ url_for('chatbot_page') }}" class="nav-link">
+            <i class="fa-solid fa-robot"></i>
+            <span>AI Chat Assistant</span>
+        </a>
+
+        <a href="{{ url_for('student_timetable') }}" class="nav-link">
+            <i class="fa-solid fa-clock"></i>
+            <span>View Timetable</span>
+        </a>
+
+        <a href="{{ url_for('student_events') }}" class="nav-link">
+            <i class="fa-solid fa-calendar-week"></i>
+            <span>View Events</span>
+        </a>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('dashboard') }}" class="nav-link">
+                <i class="fa-solid fa-house"></i>
+                <span>Portal Home</span>
+            </a>
+
+            <a href="{{ url_for('logout') }}" class="nav-link">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+
+            <div class="admin-mini-profile">
+                <div class="avatar">
+                    {{ (admin_name or user_name or 'A')[0]|upper }}
+                </div>
+
+                <div class="profile-info">
+                    <strong>{{ admin_name or user_name or 'Administrator' }}</strong>
+                    <span>Administrator</span>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main">
+
+        <!-- Top navigation -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+                <button class="icon-button menu-toggle"
+                        id="menuToggle"
+                        aria-label="Open navigation menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="page-heading">
+                    <h1>Admin Dashboard</h1>
+                    <p>Manage your campus from one place.</p>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="date-display">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span id="currentDate">Loading date...</span>
+                </div>
+
+                <button class="icon-button"
+                        onclick="window.location.reload()"
+                        aria-label="Refresh dashboard"
+                        title="Refresh dashboard">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+
+        </header>
+
+        <!-- Flask flash messages -->
+        <section class="flash-container" aria-live="polite">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">
+                            <span>{{ message }}</span>
+                            <button class="flash-close"
+                                    type="button"
+                                    aria-label="Dismiss message"
+                                    onclick="this.parentElement.remove()">
+                                &times;
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </section>
+
+        <!-- Welcome banner -->
+        <section class="welcome-banner">
+
+            <div class="welcome-content">
+                <p class="eyebrow">
+                    <i class="fa-solid fa-sparkles"></i>
+                    Campus administration
+                </p>
+
+                <h2>
+                    Welcome back, {{ admin_name or user_name or 'Administrator' }}!
+                </h2>
+
+                <p>
+                    Here's an overview of your campus today.
+                    Manage students, faculty, notices, timetables and events,
+                    all from your administrative workspace.
+                </p>
+            </div>
+
+            <div class="welcome-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+        </section>
+
+        <!-- ================= STATISTICS ================= -->
+        <section>
+            <div class="section-heading">
+                <div>
+                    <h2>Campus Overview</h2>
+                    <p>Summary of the information stored in your system.</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-purple">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <span class="stat-tag">Students</span>
+                    </div>
+
+                    <h3>{{ stats.students|default(0) }}</h3>
+                    <p>Total Students</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-blue">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="stat-tag">Faculty</span>
+                    </div>
+
+                    <h3>{{ stats.faculty|default(0) }}</h3>
+                    <p>Total Faculty Members</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-green">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <span class="stat-tag">Departments</span>
+                    </div>
+
+                    <h3>{{ stats.departments|default(0) }}</h3>
+                    <p>Academic Departments</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-orange">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <span class="stat-tag">Subjects</span>
+                    </div>
+
+                    <h3>{{ stats.subjects|default(0) }}</h3>
+                    <p>Registered Subjects</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-pink">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <span class="stat-tag">Notices</span>
+                    </div>
+
+                    <h3>{{ stats.notices|default(0) }}</h3>
+                    <p>Published Notices</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-cyan">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <span class="stat-tag">Events</span>
+                    </div>
+
+                    <h3>{{ stats.events|default(0) }}</h3>
+                    <p>Campus Events</p>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ================= MANAGEMENT ================= -->
+        <section>
+
+            <div class="section-heading">
+                <div>
+                    <h2>Management Center</h2>
+                    <p>Quick access to your campus management modules.</p>
+                </div>
+            </div>
+
+            <div class="management-grid">
+
+                <a href="{{ url_for('manage_students') }}"
+                   class="management-card">
+                    <div class="card-icon icon-purple">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3>Student Management</h3>
+                    <p>Add and view student records, courses, semesters and departments.</p>
+                    <span class="card-action">
+                        Manage Students
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+
+                <a href="{{ url_for('manage_faculty') }}"
+                   class="management-card">
+                    <div class="card-icon icon-blue">
+                        <i class="fa-solid fa-person-chalkboard"></i>
+                    </div>
+                    <h3>Faculty Management</h3>
+                    <p>Maintain faculty profiles, designations, departments and offices.</p>
+                    <span class="card-action">
+                        Manage Faculty
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+
+                <a href="{{ url_for('manage_notices') }}"
+                   class="management-card">
+                    <div class="card-icon icon-orange">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <h3>Notice Management</h3>
+                    <p>Publish campus announcements and keep students informed.</p>
+                    <span class="card-action">
+                        Manage Notices
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+
+                <a href="{{ url_for('manage_timetable') }}"
+                   class="management-card">
+                    <div class="card-icon icon-green">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <h3>Timetable Management</h3>
+                    <p>Organize subjects, faculty, classrooms and class timings.</p>
+                    <span class="card-action">
+                        Manage Timetable
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+
+                <a href="{{ url_for('event_management') }}"
+                   class="management-card">
+                    <div class="card-icon icon-pink">
+                        <i class="fa-solid fa-calendar-star"></i>
+                    </div>
+                    <h3>Event Management</h3>
+                    <p>Create and manage seminars, workshops and campus activities.</p>
+                    <span class="card-action">
+                        Manage Events
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+
+                <a href="{{ url_for('chatbot_page') }}"
+                   class="management-card">
+                    <div class="card-icon icon-cyan">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3>Campus AI Assistant</h3>
+                    <p>Open the chatbot to answer common campus-related questions.</p>
+                    <span class="card-action">
+                        Open AI Assistant
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- ================= RECENT NOTICES & EVENTS ================= -->
+        <section>
+            <div class="section-heading">
+                <div>
+                    <h2>Campus Updates</h2>
+                    <p>Recent announcements and upcoming activities.</p>
+                </div>
+            </div>
+
+            <div class="bottom-grid">
+
+                <!-- Recent notices -->
+                <article class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>
+                                <i class="fa-solid fa-bullhorn"
+                                   style="color: #4f46e5; margin-right: 7px;"></i>
+                                Recent Notices
+                            </h3>
+                            <p>Latest campus announcements</p>
+                        </div>
+
+                        <a href="{{ url_for('manage_notices') }}"
+                           class="text-link">
+                            View All
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="panel-body">
+
+                        {% if recent_notices %}
+                            {% for notice in recent_notices %}
+                                <div class="notice-item">
+
+                                    <div class="notice-icon">
+                                        <i class="fa-solid fa-file-lines"></i>
+                                    </div>
+
+                                    <div class="notice-content">
+                                        <h4>{{ notice.title }}</h4>
+
+                                        <p>
+                                            {{ notice.description|truncate(110, true, '...') }}
+                                        </p>
+
+                                        <div class="notice-meta">
+                                            <span class="category-pill">
+                                                {{ notice.category or 'General' }}
+                                            </span>
+
+                                            {% if notice.published_at %}
+                                                <span style="font-size: 10px; color: #6b7280;">
+                                                    <i class="fa-regular fa-clock"></i>
+                                                    {{ notice.published_at }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="fa-regular fa-folder-open"></i>
+                                <p>No notices are available yet.</p>
+                                <p style="margin-top: 7px;">
+                                    Publish a notice to display it here.
+                                </p>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </article>
+
+                <!-- Upcoming events -->
+                <article class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>
+                                <i class="fa-solid fa-calendar-check"
+                                   style="color: #d97706; margin-right: 7px;"></i>
+                                Upcoming Events
+                            </h3>
+                            <p>What's happening on campus</p>
+                        </div>
+
+                        <a href="{{ url_for('event_management') }}"
+                           class="text-link">
+                            View All
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="panel-body">
+
+                        {% if upcoming_events %}
+                            {% for event in upcoming_events %}
+                                <div class="event-item">
+
+                                    <div class="event-date">
+                                        {% if event.event_date %}
+                                            <span class="month">
+                                                {{ event.event_date.strftime('%b') if event.event_date.strftime is defined else event.event_date|string|truncate(3, true, '') }}
+                                            </span>
+
+                                            <span class="day">
+                                                {{ event.event_date.strftime('%d') if event.event_date.strftime is defined else '' }}
+                                            </span>
+                                        {% else %}
+                                            <span class="month">TBA</span>
+                                            <span class="day">--</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="event-content">
+                                        <h4>{{ event.event_name }}</h4>
+
+                                        <p>
+                                            {{ event.description|default('Campus event', true)|truncate(85, true, '...') }}
+                                        </p>
+
+                                        <div class="event-location">
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>
+                                                {{ event.start_time or 'Time TBA' }}
+                                            </span>
+
+                                            <span>
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                {{ event.venue or 'Venue TBA' }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="fa-regular fa-calendar-xmark"></i>
+                                <p>No upcoming events found.</p>
+                                <p style="margin-top: 7px;">
+                                    Add an event to display it here.
+                                </p>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                &copy; <span id="currentYear"></span>
+                <strong>Campus AI Assistant</strong>
+            </p>
+
+            <p>
+                Admin Portal
+                <span style="margin: 0 7px;">&bull;</span>
+                Made for smarter campus management
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        // Display current date.
+        const currentDate = document.getElementById("currentDate");
+
+        if (currentDate) {
+            currentDate.textContent = new Date().toLocaleDateString(
+                "en-IN",
+                {
+                    weekday: "short",
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+        }
+
+        // Display current year.
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+
+        // Mobile sidebar controls.
+        const sidebar = document.getElementById("sidebar");
+        const menuToggle = document.getElementById("menuToggle");
+        const overlay = document.getElementById("sidebarOverlay");
+
+        function openSidebar() {
+            sidebar.classList.add("open");
+            overlay.classList.add("show");
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            overlay.classList.remove("show");
+        }
+
+        if (menuToggle) {
+            menuToggle.addEventListener("click", function () {
+                if (sidebar.classList.contains("open")) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+        }
+
+        overlay.addEventListener("click", closeSidebar);
+
+        // Close sidebar after choosing a link on mobile.
+        document.querySelectorAll(".sidebar .nav-link").forEach(link => {
+            link.addEventListener("click", closeSidebar);
+        });
+
+        // Automatically hide flash messages after a short delay.
+        document.querySelectorAll(".flash").forEach(message => {
+            setTimeout(() => {
+                if (message.isConnected) {
+                    message.remove();
+                }
+            }, 6000);
+        });
+    </script>
+
+</body>
+</html>

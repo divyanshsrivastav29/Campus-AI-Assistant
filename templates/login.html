@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Campus AI Assistant</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+    <main class="login-card">
+        <div class="logo">🎓</div>
+        <h1>Campus AI Assistant</h1>
+        <p class="subtitle">Your smart campus companion</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email"
+                   placeholder="Enter your email"
+                   autocomplete="username" required>
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password"
+                   placeholder="Enter your password"
+                   autocomplete="current-password" required>
+
+            <button type="submit" class="primary-btn">Login</button>
+        </form>
+
+        <p class="small-note">
+            Use the account provided by your campus administrator.
+        </p>
+    </main>
+</body>
+</html>

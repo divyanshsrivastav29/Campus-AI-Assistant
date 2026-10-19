@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Timetable | Campus AI Assistant</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #243047;
+        }
+
+        header {
+            background: #173b70;
+            color: white;
+            padding: 22px 6%;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dce8ff;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(20, 40, 80, 0.07);
+        }
+
+        .panel h2 {
+            margin-top: 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+            min-width: 700px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e5eaf2;
+            text-align: left;
+        }
+
+        th {
+            background: #eaf1fc;
+            color: #173b70;
+        }
+
+        tr:hover td {
+            background: #f8faff;
+        }
+
+        .empty {
+            padding: 22px;
+            margin-top: 20px;
+            background: #fff6df;
+            border-radius: 8px;
+            color: #805b10;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 22px;
+            padding: 11px 17px;
+            background: #173b70;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .back-link:hover {
+            background: #245398;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                margin-top: 18px;
+                padding: 0 12px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Campus AI Assistant</h1>
+        <p>My Class Timetable</p>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>Weekly Timetable</h2>
+            <p>Your classes for your assigned department and semester.</p>
+
+            {% if timetable %}
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Time</th>
+                                <th>Subject</th>
+                                <th>Subject Code</th>
+                                <th>Faculty</th>
+                                <th>Room</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in timetable %}
+                                <tr>
+                                    <td>{{ item.day_of_week }}</td>
+
+                                    <td>
+                                        {{ item.start_time }}
+                                        – {{ item.end_time }}
+                                    </td>
+
+                                    <td>{{ item.subject_name }}</td>
+
+                                    <td>{{ item.subject_code or "—" }}</td>
+
+                                    <td>
+                                        {{ item.faculty_name or "Not assigned" }}
+                                    </td>
+
+                                    <td>{{ item.room_number or "Not assigned" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty">
+                    <strong>No timetable entries found.</strong>
+                    <p>
+                        Please check that your student profile has a department
+                        and semester assigned, and that the administrator has
+                        added matching timetable entries.
+                    </p>
+                </div>
+            {% endif %}
+
+            <a class="back-link"
+               href="{{ url_for('dashboard') }}">
+                Back to Dashboard
+            </a>
+        </section>
+    </main>
+</body>
+</html>

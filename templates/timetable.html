@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Management | Campus AI Assistant</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        header h2 {
+            font-size: 23px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #93c5fd;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 17px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            margin-top: 20px;
+            background: #2563eb;
+            color: white;
+        }
+
+        .add-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        .message {
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .search {
+            width: 100%;
+            max-width: 420px;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 950px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 13px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        .empty {
+            padding: 20px;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Campus AI Assistant</h2>
+    <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('manage_students') }}">Students</a>
+        <a href="{{ url_for('manage_faculty') }}">Faculty</a>
+        <a href="{{ url_for('manage_notices') }}">Notices</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <section class="page-heading">
+        <h1>Timetable Management</h1>
+        <p>Schedule classes, assign faculty, and manage classrooms.</p>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <section class="card">
+        <h2>Add Class to Timetable</h2>
+
+        <form method="POST" action="{{ url_for('manage_timetable') }}">
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="department_id">Department *</label>
+                    <select id="department_id" name="department_id" required>
+                        <option value="">Select Department</option>
+                        {% for department in departments %}
+                            <option value="{{ department.department_id }}">
+                                {{ department.department_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="subject_id">Subject *</label>
+                    <select id="subject_id" name="subject_id" required>
+                        <option value="">Select Subject</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.subject_id }}">
+                                {{ subject.subject_name }} ({{ subject.subject_code }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="faculty_id">Faculty *</label>
+                    <select id="faculty_id" name="faculty_id" required>
+                        <option value="">Select Faculty</option>
+                        {% for member in faculty %}
+                            <option value="{{ member.faculty_id }}">
+                                {{ member.full_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="semester">Semester *</label>
+                    <select id="semester" name="semester" required>
+                        <option value="">Select Semester</option>
+                        {% for sem in range(1, 9) %}
+                            <option value="{{ sem }}">{{ sem }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="day_of_week">Day *</label>
+                    <select id="day_of_week" name="day_of_week" required>
+                        <option value="">Select Day</option>
+                        {% for day in ['Monday', 'Tuesday', 'Wednesday',
+                                       'Thursday', 'Friday', 'Saturday'] %}
+                            <option value="{{ day }}">{{ day }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="room_number">Room Number *</label>
+                    <input type="text" id="room_number" name="room_number"
+                           placeholder="e.g. Lab 2 / Room 101" required>
+                </div>
+
+                <div class="field">
+                    <label for="start_time">Start Time *</label>
+                    <input type="time" id="start_time" name="start_time" required>
+                </div>
+
+                <div class="field">
+                    <label for="end_time">End Time *</label>
+                    <input type="time" id="end_time" name="end_time" required>
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn add-btn">
+                + Add Timetable Entry
+            </button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Class Schedule</h2>
+
+        <input type="search" id="timetableSearch" class="search"
+               placeholder="Search subject, faculty, day, room...">
+
+        <div class="table-wrap">
+            <table id="timetableTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Department</th>
+                        <th>Subject</th>
+                        <th>Faculty</th>
+                        <th>Semester</th>
+                        <th>Day</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Room</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in timetable %}
+                    <tr>
+                        <td>{{ item.timetable_id }}</td>
+                        <td>{{ item.department_name or '-' }}</td>
+                        <td>{{ item.subject_name or '-' }}</td>
+                        <td>{{ item.faculty_name or '-' }}</td>
+                        <td>{{ item.semester }}</td>
+                        <td>{{ item.day_of_week }}</td>
+                        <td>{{ item.start_time }}</td>
+                        <td>{{ item.end_time }}</td>
+                        <td>{{ item.room_number }}</td>
+                        <td>
+                            <form method="POST"
+                                  action="{{ url_for('delete_timetable', timetable_id=item.timetable_id) }}"
+                                  onsubmit="return confirm('Delete this timetable entry?');">
+                                <button type="submit" class="btn delete-btn">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="10" class="empty">
+                            No timetable entries found. Add a class above.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    document.getElementById("timetableSearch").addEventListener("input", function () {
+        const keyword = this.value.toLowerCase();
+
+        document.querySelectorAll("#timetableTable tbody tr").forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(keyword)
+                ? ""
+                : "none";
+        });
+    });
+
+    const startInput = document.getElementById("start_time");
+    const endInput = document.getElementById("end_time");
+
+    function validateTime() {
+        endInput.setCustomValidity(
+            startInput.value && endInput.value &&
+            endInput.value <= startInput.value
+                ? "End time must be later than start time."
+                : ""
+        );
+    }
+
+    startInput.addEventListener("change", validateTime);
+    endInput.addEventListener("change", validateTime);
+</script>
+
+</body>
+</html>
