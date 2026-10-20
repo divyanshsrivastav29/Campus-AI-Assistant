@@ -9,7 +9,10 @@ from flask import (
     url_for, session, flash, jsonify
 )
 from database import connect_db
-from werkzeug.security import check_password_hash
+from werkzeug.security import (
+    check_password_hash,
+    generate_password_hash
+)
 from functools import wraps
 from datetime import date
 import logging
@@ -667,6 +670,67 @@ def admin_dashboard():
         user_name=session.get("user_name", "Administrator")
     )
 
+
+#ADD ADMIN
+@app.route("/admin/add-admin", methods=["GET", "POST"])
+@admin_required
+def add_admin():
+    if request.method == "POST":
+        full_name = request.form.get("full_name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+
+        if not full_name or not email or not password:
+            flash("All fields are required.", "danger")
+            return redirect(url_for("add_admin"))
+
+        if len(password) < 12:
+            flash("Password must be at least 12 characters.", "danger")
+            return redirect(url_for("add_admin"))
+
+        connection = cursor = None
+
+        try:
+            connection, cursor = open_db()
+
+            cursor.execute(
+                "SELECT user_id FROM users WHERE email = %s LIMIT 1",
+                (email,)
+            )
+
+            if cursor.fetchone():
+                flash("This email is already registered.", "danger")
+                return redirect(url_for("add_admin"))
+
+            cursor.execute(
+                """
+                INSERT INTO users
+                    (full_name, email, password_hash, role, is_active)
+                VALUES (%s, %s, %s, 'Admin', 1)
+                """,
+                (
+                    full_name,
+                    email,
+                    generate_password_hash(password)
+                )
+            )
+
+            connection.commit()
+
+            flash("New Admin created successfully.", "success")
+            return redirect(url_for("add_admin"))
+
+        except Exception:
+            if connection is not None:
+                connection.rollback()
+
+            app.logger.exception("Failed to create Admin account")
+            flash("Could not create Admin account. Check the application logs.", "danger")
+
+        finally:
+            close_db(cursor, connection)
+
+    return render_template("add_admin.html")
 
 # =========================================================
 # STUDENT DASHBOARD

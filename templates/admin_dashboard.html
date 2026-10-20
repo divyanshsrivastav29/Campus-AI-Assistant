@@ -1189,7 +1189,7 @@
                 <a href="{{ url_for('event_management') }}"
                    class="management-card">
                     <div class="card-icon icon-pink">
-                        <i class="fa-solid fa-calendar-star"></i>
+                        <i class="fa-solid fa-star"></i>
                     </div>
                     <h3>Event Management</h3>
                     <p>Create and manage seminars, workshops and campus activities.</p>
@@ -1208,6 +1208,18 @@
                     <p>Open the chatbot to answer common campus-related questions.</p>
                     <span class="card-action">
                         Open AI Assistant
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+                
+                <a href="{{ url_for('add_admin') }}" class="management-card">
+                    <div class="card-icon icon-purple">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h3>Add New Admin</h3>
+                    <p>Create an administrator account for the Campus AI Assistant portal.</p>
+                    <span class="card-action">
+                        Add Administrator
                         <i class="fa-solid fa-arrow-right"></i>
                     </span>
                 </a>
