@@ -1318,7 +1318,15 @@ def chatbot_api():
 
     # 4. Ask Gemini to generate an answer
     try:
-        client = genai.Client(api_key=api_key)
+        client = genai.Client(
+        api_key=api_key,
+        http_options=types.HttpOptions(
+        timeout=20000,
+        retry_options=types.HttpRetryOptions(
+            attempts=1
+        )
+        )
+        )
 
         prompt = f"""
 You are CampusAI, an assistant for a college campus.
