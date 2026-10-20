@@ -20,6 +20,31 @@ import logging
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
+def open_db():
+    """Return a MySQL connection and dictionary cursor."""
+    connection = connect_db()
+
+    if connection is None:
+        raise RuntimeError("Database connection failed.")
+
+    return connection, connection.cursor(dictionary=True)
+
+
+def close_db(cursor, connection):
+    """Safely close database resources."""
+    if cursor is not None:
+        try:
+            cursor.close()
+        except Exception:
+            app.logger.exception("Failed to close database cursor")
+
+    if connection is not None:
+        try:
+            if connection.is_connected():
+                connection.close()
+        except Exception:
+            app.logger.exception("Failed to close database connection")
+
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
