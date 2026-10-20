@@ -17,6 +17,11 @@ import logging
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
