@@ -551,6 +551,179 @@ def index():
 
 
 # =========================================================
+# STUDENT SELF-REGISTRATION
+# =========================================================
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if "user_id" in session:
+        return redirect(url_for("dashboard"))
+
+    departments = fetch_all(
+        "SELECT department_id, department_name FROM departments "
+        "ORDER BY department_name"
+    )
+
+    if request.method == "POST":
+        full_name = request.form.get("full_name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        roll_number = request.form.get("roll_number", "").strip()
+        department_id = request.form.get("department_id", "").strip()
+        course = request.form.get("course", "").strip()
+        semester = request.form.get("semester", "").strip()
+        admission_year = request.form.get("admission_year", "").strip()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        error = None
+
+        if not all([full_name, email, roll_number, department_id, password, confirm_password]):
+            error = "Please fill in all required fields."
+
+        elif len(full_name) > 100:
+            error = "Full name is too long."
+
+        elif len(email) > 100:
+            error = "Email address is too long."
+
+        elif len(roll_number) > 30:
+            error = "Roll number is too long."
+
+        elif len(password) < 8:
+            error = "Password must be at least 8 characters long."
+
+        elif password != confirm_password:
+            error = "Passwords do not match."
+
+        if not error:
+            try:
+                department_id = int(department_id)
+
+                if semester:
+                    semester = int(semester)
+
+                if admission_year:
+                    admission_year = int(admission_year)
+
+            except ValueError:
+                error = "Please enter valid numeric details."
+
+        if not error:
+            valid_department = fetch_one(
+                "SELECT department_id FROM departments "
+                "WHERE department_id = %s",
+                (department_id,)
+            )
+
+            if not valid_department:
+                error = "Please select a valid department."
+
+            elif semester and not 1 <= semester <= 12:
+                error = "Please enter a valid semester."
+
+            elif admission_year and not 1901 <= admission_year <= 2155:
+                error = "Please enter a valid admission year."
+
+        if not error:
+            existing_email = fetch_one(
+                "SELECT user_id FROM users WHERE email = %s",
+                (email,)
+            )
+
+            existing_roll = fetch_one(
+                "SELECT student_id FROM students WHERE roll_number = %s",
+                (roll_number,)
+            )
+
+            if existing_email:
+                error = "This email is already registered."
+
+            elif existing_roll:
+                error = "This roll number is already registered."
+
+        if not error:
+            connection = None
+            cursor = None
+
+            try:
+                connection = connect_db()
+
+                if connection is None:
+                    raise Exception("Database connection failed.")
+
+                cursor = connection.cursor()
+
+                cursor.execute(
+                    """
+                    INSERT INTO users
+                        (full_name, email, password_hash, role, is_active)
+                    VALUES (%s, %s, %s, 'Student', 1)
+                    """,
+                    (
+                        full_name,
+                        email,
+                        generate_password_hash(password),
+                    )
+                )
+
+                user_id = cursor.lastrowid
+
+                cursor.execute(
+                    """
+                    INSERT INTO students
+                        (user_id, roll_number, department_id, course,
+                         semester, admission_year)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    """,
+                    (
+                        user_id,
+                        roll_number,
+                        department_id,
+                        course or None,
+                        semester or None,
+                        admission_year or None,
+                    )
+                )
+
+                connection.commit()
+
+                flash(
+                    "Registration successful! You can now log in.",
+                    "success"
+                )
+
+                return redirect(url_for("login"))
+
+            except Exception as error:
+                if connection:
+                    connection.rollback()
+
+                logger.exception(
+                    "Student registration failed: %s", error
+                )
+
+                flash(
+                    "Registration failed. Email or roll number may "
+                    "already exist.",
+                    "danger"
+                )
+
+            finally:
+                if cursor:
+                    cursor.close()
+
+                if connection:
+                    connection.close()
+
+        else:
+            flash(error, "danger")
+
+    return render_template(
+        "register.html",
+        departments=departments
+    )
+
+# =========================================================
 # LOGIN AND LOGOUT
 # =========================================================
 

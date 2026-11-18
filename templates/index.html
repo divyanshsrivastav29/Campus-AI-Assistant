@@ -41,6 +41,18 @@
             color: white;
             padding: 12px 22px;
             border-radius: 8px;
+            display: inline-block;
+            transition: background 0.2s ease;
+        }
+
+        nav a:hover, .btn:hover {
+            background: #4338ca;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .hero {
@@ -118,9 +130,13 @@
 <body>
     <nav>
         <div class="logo">Campus AI Assistant</div>
-        <a href="{{ url_for('login') }}">Login</a>
-    </nav>
 
+        <div class="nav-buttons">
+            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
+    </nav>
+    
     <section class="hero">
         <h1>Your Campus, <span>Smarter</span></h1>
 

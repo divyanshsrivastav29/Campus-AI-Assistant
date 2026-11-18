@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration | Campus AI Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eaf2ff, #f5f0ff);
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 15px;
+        }
+
+        .register-card {
+            background: white;
+            width: 100%;
+            max-width: 520px;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px #00000012;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 14px 0 7px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px #4f46e520;
+        }
+
+        .primary-btn {
+            width: 100%;
+            border: none;
+            background: #4f46e5;
+            color: white;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+
+        .primary-btn:hover {
+            background: #4338ca;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .alert.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .alert.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .alert.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            color: #64748b;
+        }
+
+        .login-link a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .register-card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="register-card">
+
+        <div class="logo">🎓</div>
+
+        <h1>Student Registration</h1>
+        <p class="subtitle">Create your Campus AI Assistant account</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('register') }}">
+
+            <label for="full_name">Full Name</label>
+            <input id="full_name" name="full_name"
+                   type="text" placeholder="Enter your full name"
+                   maxlength="100" required>
+
+            <label for="email">Email Address</label>
+            <input id="email" name="email"
+                   type="email" placeholder="Enter your email"
+                   maxlength="100" required>
+
+            <label for="roll_number">Roll Number</label>
+            <input id="roll_number" name="roll_number"
+                   type="text" placeholder="Enter your roll number"
+                   maxlength="30" required>
+
+            <label for="department_id">Department</label>
+            <select id="department_id" name="department_id" required>
+                <option value="">Select Department</option>
+                {% for department in departments %}
+                    <option value="{{ department.department_id }}">
+                        {{ department.department_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="course">Course</label>
+            <input id="course" name="course"
+                   type="text" placeholder="e.g. BCA">
+
+            <label for="semester">Semester</label>
+            <select id="semester" name="semester">
+                <option value="">Select Semester</option>
+                {% for i in range(1, 9) %}
+                    <option value="{{ i }}">Semester {{ i }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="admission_year">Admission Year</label>
+            <input id="admission_year" name="admission_year"
+                   type="number" placeholder="e.g. 2026"
+                   min="1901" max="2155">
+
+            <label for="password">Password</label>
+            <input id="password" name="password"
+                   type="password" placeholder="Minimum 8 characters"
+                   minlength="8" autocomplete="new-password" required>
+
+            <label for="confirm_password">Confirm Password</label>
+            <input id="confirm_password" name="confirm_password"
+                   type="password" placeholder="Confirm your password"
+                   minlength="8" autocomplete="new-password" required>
+
+            <button type="submit" class="primary-btn">
+                Register
+            </button>
+        </form>
+
+        <p class="login-link">
+            Already have an account?
+            <a href="{{ url_for('login') }}">Login</a>
+        </p>
+
+    </main>
+</body>
+</html>
