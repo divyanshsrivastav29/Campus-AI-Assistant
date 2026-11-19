@@ -1,262 +1,274 @@
-# Campus AI Assistant
+# 🎓 Campus AI Assistant
 
-An AI-powered campus information and management system built using Python, Flask, MySQL, HTML, CSS, JavaScript, and Google Gemini AI.
+An AI-powered College Management and Information Assistant built using **Python, Flask, MySQL-compatible TiDB Cloud, and Google Gemini AI**. The platform helps students and administrators access campus information, manage academic activities, and interact with an AI-powered chatbot.
 
-## 1. Project Overview
+## 🌐 Live Demo
 
-Campus AI Assistant is a web-based application designed to make campus information easily accessible to students and administrators.
+**Live Website:** https://campus-ai-assistant-04.vercel.app/
 
-The system provides role-based login, campus information management, timetable access, notices, events, and an AI-powered chatbot to answer campus-related questions.
+**GitHub Repository:** https://github.com/divyanshsrivastav29/Campus-AI-Assistant
 
-## 2. Objectives
+> Replace the live website URL above if your actual Vercel domain is different.
 
-- Provide a centralized platform for campus information.
-- Allow students to access their academic schedules and campus updates.
-- Enable administrators to manage student and campus information.
-- Provide an AI chatbot for answering campus-related queries.
-- Protect pages using authentication and role-based access control.
-- Store and retrieve information using a MySQL database.
+---
 
-## 3. Key Features
+## 📌 Project Overview
 
-### Student Features
-- Student login and personalized dashboard.
-- View class timetable and schedule.
-- Access campus notices.
-- View upcoming events.
-- Ask questions through the AI chatbot.
+Campus AI Assistant is a web-based application designed to simplify communication between students and college administration.
 
-### Administrator Features
-- Secure administrator login.
+It provides a centralized platform for accessing academic information, managing student and faculty records, viewing notices and timetables, and interacting with an AI chatbot.
+
+The application supports different user roles, including administrators and students, with role-based access to relevant features.
+
+## ✨ Key Features
+
+### 👨‍💼 Admin Module
+- Admin login and authentication.
 - Admin dashboard.
-- Student management.
-- Faculty management.
-- Notice management.
-- Timetable management.
-- Event management.
-- Access to relevant campus information.
+- Add, view, and manage student records.
+- Manage faculty information.
+- Publish and manage college notices.
+- Manage academic timetable.
+- Manage campus events.
+- Manage departments and academic information.
 
-### AI Chatbot
-- Answers campus-related questions.
-- Uses available campus information from the database.
-- Integrates with Google Gemini AI.
-- Includes input validation and a fallback mechanism for certain AI service errors.
+### 🎓 Student Module
+- Student login and authentication.
+- Student dashboard.
+- View college notices.
+- View faculty information.
+- Access academic timetable.
+- View upcoming campus events.
+- Interact with the Campus AI chatbot.
 
-### Security and Reliability
-- Password hashing.
-- Login-required routes.
-- Role-based access restrictions.
-- Automated application tests.
-- MySQL database backup and restore testing.
+### 🤖 AI Chatbot
+- Powered by Google Gemini AI.
+- Answers academic and campus-related questions.
+- Uses verified campus information from the database.
+- Provides helpful and conversational responses.
+- Includes fallback handling for temporary AI service failures.
 
-## 4. Technologies Used
+## 🛠️ Technologies Used
 
 | Technology | Purpose |
 |---|---|
 | Python | Backend programming |
 | Flask | Web application framework |
-| MySQL | Database management |
+| TiDB Cloud | MySQL-compatible cloud database |
+| MySQL Connector | Database connectivity |
+| Google Gemini API | AI chatbot |
 | HTML5 | Web page structure |
-| CSS3 | Styling and responsive layout |
-| JavaScript | Client-side interactions |
-| Google Gemini API | AI chatbot responses |
-| pytest | Automated testing |
-| python-dotenv | Environment configuration |
+| CSS3 | Styling and responsive design |
+| JavaScript | Frontend interactivity |
+| Jinja2 | Dynamic templates |
+| Vercel | Application hosting |
+| Git & GitHub | Version control |
 
-## 5. Project Structure
+## 🏗️ System Architecture
 
-The main project directory is:
-
-`D:\CAMPUS AI ASSISTANT`
-
-Important files and directories include:
-
-- `app.py` — Flask application and routes.
-- `database.py` — Database connection utilities.
-- `config.py` — Application configuration.
-- `.env` — Local environment variables and secrets.
-- `.venv/` — Python virtual environment.
-- `templates/` — HTML templates.
-- `static/` — CSS, JavaScript, and other static assets, if used.
-- `tests/` — Automated tests.
-- `campus_ai_backup.sql` — Database backup file, if stored in the project directory.
-
-The exact contents may vary according to the current project files.
-
-## 6. Requirements
-
-Install or configure the following:
-
-- Python 3.14, or the Python version compatible with your installed dependencies.
-- MySQL Server.
-- MySQL command-line tools, including `mysql` and `mysqldump`.
-- A Google Gemini API key for AI functionality.
-- Visual Studio Code or another code editor.
-
-## 7. Installation and Setup
-
-### Step 1: Open the project
-
-Open the project folder in Visual Studio Code:
-
-`D:\CAMPUS AI ASSISTANT`
-
-### Step 2: Activate the virtual environment
-
-Open the VS Code terminal and execute:
-
-```powershell
-cd "D:\CAMPUS AI ASSISTANT"
-.venv\Scripts\Activate.ps1
+```text
+              Students / Admin
+                     |
+                     v
+               Vercel Hosting
+                     |
+                     v
+                Flask Backend
+                /           \
+               v             v
+        TiDB Cloud       Gemini API
+        Database         AI Chatbot
+               \             /
+                \           /
+                 v         v
+                 Campus AI
+                 Assistant
 ```
 
-### Step 3: Install dependencies
+## 📂 Project Structure
 
-If a `requirements.txt` file exists, run:
+```text
+CAMPUS AI ASSISTANT/
+│
+├── app.py
+├── config.py
+├── database.py
+├── requirements.txt
+├── .python-version
+├── .gitignore
+├── ca.pem
+├── README.md
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+├── templates/
+│
+└── tests/
+```
+
+## ⚙️ Local Installation and Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/divyanshsrivastav29/Campus-AI-Assistant.git
+```
+
+### 2. Open the Project Directory
+
+```bash
+cd "Campus-AI-Assistant"
+```
+
+### 3. Create a Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+### 4. Activate the Virtual Environment
+
+For Windows PowerShell:
 
 ```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+### 5. Install Dependencies
+
+```bash
 python -m pip install -r requirements.txt
 ```
 
-If it does not exist, install the packages required by the current project and its imports.
+### 6. Configure Environment Variables
 
-### Step 4: Configure environment variables
+Create a `.env` file in the project root directory.
 
-Create or update the local `.env` file using the variable names expected by the application.
+Add the following configuration:
 
-Example:
+```env
+FLASK_SECRET_KEY=your_secret_key
 
-```dotenv
-FLASK_SECRET_KEY=replace_with_a_random_secret
-GEMINI_API_KEY=replace_with_your_api_key
-GEMINI_MODEL=your_configured_gemini_model
+DB_HOST=your_tidb_host
+DB_PORT=4000
+DB_USER=your_tidb_username
+DB_PASSWORD=your_tidb_password
+DB_NAME=campus_ai
+
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
-Use the Gemini model configured for your application. Never commit `.env` or expose API keys, database passwords, or other secrets.
+**Important:**
+- Replace placeholder values with your own credentials.
+- Never upload your `.env` file to GitHub.
+- Keep your API keys and database credentials private.
+- Configure the TiDB CA certificate (`ca.pem`) as required by the database connection.
 
-### Step 5: Configure MySQL
+### 7. Run the Application
 
-Ensure MySQL Server is running and the application database is configured as:
-
-`campus_ai`
-
-Create or restore the required tables using your project's existing database setup and backup procedures. Configure database credentials locally according to `database.py` and `config.py`.
-
-### Step 6: Run the application
-
-```powershell
+```bash
 python app.py
 ```
 
-Open the local address shown in the terminal, normally:
+Open your browser:
 
+```text
 http://127.0.0.1:5000
-
-Log in using your existing authorized administrator or student account.
-
-## 8. Database
-
-The project uses MySQL database `campus_ai`.
-
-The database includes tables for core campus information, such as:
-
-- `users`
-- `students`
-- `departments`
-- `faculty`
-- `notices`
-- `subjects`
-- `timetable`
-- `events`
-- `chat_history`
-- `documents`
-- `campus_info`
-
-The actual schema should be verified against the current database.
-
-## 9. Database Backup and Restore
-
-A database backup has been created and the restore process has been tested using a separate database named `campus_ai_restore_test`.
-
-### Create a backup
-
-```powershell
-mysqldump -u root -p campus_ai --result-file="D:\CAMPUS AI ASSISTANT\campus_ai_backup.sql"
 ```
 
-### Restore into a separate test database
+## ☁️ Deployment Architecture
 
-First create the test database in MySQL:
+The application uses the following cloud services:
 
-```sql
-CREATE DATABASE campus_ai_restore_test;
+| Service | Responsibility |
+|---|---|
+| Vercel | Hosts the Flask application |
+| TiDB Cloud Starter | Stores application data |
+| Google Gemini API | Provides AI chatbot functionality |
+| GitHub | Stores and manages source code |
+
+### Environment Variables on Vercel
+
+Configure these variables under:
+
+**Vercel Dashboard → Project → Settings → Environment Variables**
+
+| Variable | Description |
+|---|---|
+| FLASK_SECRET_KEY | Flask session security |
+| DB_HOST | TiDB hostname |
+| DB_PORT | TiDB port |
+| DB_USER | TiDB username |
+| DB_PASSWORD | TiDB password |
+| DB_NAME | Database name |
+| GEMINI_API_KEY | Google Gemini API key |
+| GEMINI_MODEL | Gemini model name |
+
+Do not store sensitive credentials directly in source code.
+
+## 🗄️ Database
+
+The project uses TiDB Cloud Starter, which is compatible with MySQL.
+
+Database name:
+
+```text
+campus_ai
 ```
 
-Then execute this command in PowerShell:
+The database manages information related to:
 
-```powershell
-mysql -u root -p campus_ai_restore_test < "D:\CAMPUS AI ASSISTANT\campus_ai_backup.sql"
-```
+- Users
+- Students
+- Faculty
+- Departments
+- Notices
+- Timetable
+- Events
+- Subjects
+- Chat history
+- Campus information
+- Documents
 
-Verify the restored tables and record counts before considering the backup fully validated.
+## 🔐 Security
 
-**Important:** Keep the original `campus_ai` database safe. Do not restore over the production or working database during a test.
+- Environment-based configuration.
+- Password hashing.
+- Role-based access control.
+- Session-based authentication.
+- Secure database connections using SSL.
+- Secret credentials excluded from GitHub.
 
-## 10. Testing
+## 🚀 Future Enhancements
 
-The project has previously reported 22 passing automated tests.
+- Advanced AI chatbot capabilities.
+- Student attendance management.
+- Assignment and examination management.
+- AI-powered academic assistance.
+- Email and notification integration.
+- Advanced analytics dashboard.
+- Mobile-friendly progressive web application.
 
-Tests cover areas including:
+## 🎯 Project Objective
 
-- Chatbot request validation.
-- Chatbot response handling.
-- Authentication requirements.
-- Role-based access restrictions.
-- Protection of administrator and student routes.
+The main objective of Campus AI Assistant is to make college information more accessible, improve communication between students and administrators, and simplify campus management through artificial intelligence.
 
-Run the tests from the project directory:
+## 👨‍💻 Developer
 
-```powershell
-python -m pytest -v
-```
+**Divyanshu Srivastava**
 
-Review the latest test output before reporting the final test count.
+BCA Student
 
-## 11. Security Considerations
+Institute of Technology & Management, GIDA, Gorakhpur
 
-- Store passwords as secure hashes, not plaintext.
-- Keep API keys and Flask secret keys out of source control.
-- Restrict administrator routes to authorized administrators.
-- Validate user input on the server.
-- Use parameterized SQL queries.
-- Keep backups in a secure location.
-- Do not commit real student records or sensitive database dumps to a public repository.
-
-## 12. Future Scope
-
-Possible future improvements include:
-
-- Better chatbot context retrieval.
-- More advanced timetable filtering.
-- Student attendance tracking.
-- Assignment and examination information.
-- Email or notification integration.
-- Analytics and reporting.
-- Deployment to a secure hosting platform.
-
-These are potential future enhancements and are not necessarily implemented in the current version.
-
-## 13. Conclusion
-
-Campus AI Assistant provides a centralized platform for student information, academic schedules, campus announcements, administrative management, and AI-assisted campus queries.
-
-By combining Flask, MySQL, and Google Gemini AI, the project demonstrates web development, database integration, authentication, access control, and AI integration in a practical campus application.
+GitHub: [@divyanshsrivastav29](https://github.com/divyanshsrivastav29)
 
 ---
 
-**Project Name:** Campus AI Assistant  
-**Backend:** Python and Flask  
-**Database:** MySQL  
-**AI Integration:** Google Gemini  
-**Development Environment:** Visual Studio Code  
-**Project Status:** Core application features implemented; verify current tests and deployment requirements before release.
+⭐ If you find this project useful, consider giving the repository a star!
+
+**Campus AI Assistant — Making Campus Information Smarter with AI.**
