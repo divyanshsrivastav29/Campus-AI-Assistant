@@ -8,8 +8,6 @@ An AI-powered College Management and Information Assistant built using **Python,
 
 **GitHub Repository:** https://github.com/divyanshsrivastav29/Campus-AI-Assistant
 
-> Replace the live website URL above if your actual Vercel domain is different.
-
 ---
 
 ## 📌 Project Overview
