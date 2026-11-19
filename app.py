@@ -94,7 +94,29 @@ def execute_query(query, params=()):
     connection = None
     cursor = None
 
-#
+    try:
+        connection = connect_db()
+        if connection is None:
+            return False
+
+        cursor = connection.cursor()
+        cursor.execute(query, params)
+        connection.commit()
+        return True
+
+    except Exception as error:
+        if connection:
+            connection.rollback()
+        logger.exception("Database write error: %s", error)
+        return False
+
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+
 def chatbot_answer(message):
     """Retrieve verified campus information from MySQL for Gemini."""
 
@@ -453,28 +475,6 @@ def chatbot_answer(message):
         "could not be verified from the available database records."
     )
 
-#
-    try:
-        connection = connect_db()
-        if connection is None:
-            return False
-
-        cursor = connection.cursor()
-        cursor.execute(query, params)
-        connection.commit()
-        return True
-
-    except Exception as error:
-        if connection:
-            connection.rollback()
-        logger.exception("Database write error: %s", error)
-        return False
-
-    finally:
-        if cursor:
-            cursor.close()
-        if connection:
-            connection.close()
 
 
 # =========================================================

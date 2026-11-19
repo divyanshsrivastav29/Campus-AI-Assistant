@@ -1,3 +1,9 @@
+# Railway configuration backups
+database_railway_backup.py
+
+# Local backup folders
+*_BACKUPS/
+backups/
 
 # Environment variables and secrets
 .env
