@@ -1588,9 +1588,13 @@ def chatbot_api():
         client = genai.Client(
         api_key=api_key,
         http_options=types.HttpOptions(
-        timeout=20000,
+        timeout=60000,
         retry_options=types.HttpRetryOptions(
-            attempts=1
+            attempts=2,
+            initial_delay=1,
+            max_delay=5,
+            exp_base=2,
+            jitter=1
         )
         )
         )
